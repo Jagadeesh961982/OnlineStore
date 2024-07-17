@@ -8,6 +8,7 @@ import { getProductDetails } from '../../actions/productAction';
 import { useParams } from 'react-router-dom';
 import "./productDetails.css";
 import ReviewCard from './ReviewCard.js';
+import Loading from '../layout/Loading/Loading.js';
 
 
 const ProductDetails=()=>{
@@ -54,6 +55,8 @@ const ProductDetails=()=>{
 
   return (
     <>
+    {loading?<Loading />:
+    (<>
       <div className='productDetails'>
   
             {product.images &&
@@ -77,7 +80,7 @@ const ProductDetails=()=>{
                 <ReactStars {...options} /> <span>({product.numOfReviews} Reviews)</span>
               </div>
               <div className='productinfoBl-3'> 
-                <h3>Price: ${product.price}</h3>
+                <h3>Price: ₹{product.price}</h3>
                 <div className='productinfoBl-3-1'>
                   <div className='productInfoBl-3-1-1'>
                     <button>-</button>
@@ -105,8 +108,10 @@ const ProductDetails=()=>{
         }
         </div>):((<p className='noReviews'>No Reviews Yet</p>))}
       </div>
-    </>
-  );
+    </>)
+}
+</>
+);
 }
 
 export default ProductDetails;

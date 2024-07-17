@@ -2,6 +2,8 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
+
+
 import productRoutes from './routes/productRoute.js';
 import errorMidleware from './middleware/error_middleware.js';
 import userRoutes from "./routes/userRoutes.js";
@@ -10,14 +12,13 @@ import orderRoutes from './routes/orderRoutes.js';
 import bodyParser from 'body-parser';
 
 
-dotenv.config({path:'backend/config/config.env'});
 const app=express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
 
 app.use(bodyParser.urlencoded({extended:true}))
-
+dotenv.config({path:'./config/config.env'});
 // Database connection
 mongoose.connect(process.env.MONGO_URL)
 .then(()=>{
