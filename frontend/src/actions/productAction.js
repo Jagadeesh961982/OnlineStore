@@ -3,16 +3,18 @@ import { ALL_PRODUCTS_REQUEST, ALL_PRODUCTS_SUCCESS, ALL_PRODUCTS_FAIL, CLEAR_ER
 
 
 const baseUrl=process.env.REACT_APP_BASE_URL;
-console.log(baseUrl)
+
 export const getProducts=()=> async (dispatch) =>{
     try{
         dispatch({type:ALL_PRODUCTS_REQUEST});
-        // console.log("hello from getProducts")
-        const {data} =await axios.get(`${baseUrl}/api/products`);
-        dispatch({type:ALL_PRODUCTS_SUCCESS,payload:data});
+
+        const response =await axios.get(`${baseUrl}/api/products`);
+
+        dispatch({type:ALL_PRODUCTS_SUCCESS,payload:response.data});
 
     }catch(error){
-        dispatch({type:ALL_PRODUCTS_FAIL,payload:error.data.message});
+        const errorMessage = error.response && error.response.data.message ? error.response.data.message : error.message;
+        dispatch({type:ALL_PRODUCTS_FAIL,payload:errorMessage});
     }
 }
 
@@ -20,15 +22,13 @@ export const getProductDetails=(id)=>async (dispatch)=>{
 
     try{
         dispatch({type:PRODUCT_DETAILS_REQUEST});
-        // console.log(`/api/product/${id}`)
-        const {data}=await axios.get(`${baseUrl}/api/product/${id}`);
-        // console.log(data);
-        
-        dispatch({type:PRODUCT_DETAILS_SUCCESS,payload:data.product});
+        const response=await axios.get(`${baseUrl}/api/product/${id}`);  
+        console.log(response)
+        dispatch({type:PRODUCT_DETAILS_SUCCESS,payload:response.data});
 
     }catch(error){
-        console.log("error",error.data.message);
-        dispatch({type:PRODUCT_DETAILS_FAIL,payload:error.data.message});
+        const errorMessage = error.response && error.response.data.message ? error.response.data.message : error.message;
+        dispatch({type:PRODUCT_DETAILS_FAIL,payload:errorMessage});
         
     }
 }

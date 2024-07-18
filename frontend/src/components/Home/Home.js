@@ -1,6 +1,6 @@
 import { CgMouse } from "react-icons/cg";
 import "./Home.css";
-import  Product from "./Product.js";
+import  Product from "./ProductCard.js";
 import MetaData from "../layout/MetaData.js";
 import { getProducts } from "../../actions/productAction.js";
 import {useDispatch,useSelector} from "react-redux";
@@ -9,8 +9,10 @@ import Loading from "../layout/Loading/Loading.js";
 
 const Home=()=>{
     const dispatch=useDispatch();
-    const {products,loading}=useSelector(state=>state.products);
-    // console.log(products,productsCount,loading);
+    const response=useSelector(state=>state.products);
+    // console.log(response);
+    const {products,productCount,loading}=response;
+    // console.log(products,loading,productCount);
     useEffect(() => {
        dispatch(getProducts());
       }

@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import Carousel from 'react-multi-carousel';
 import "react-multi-carousel/lib/styles.css";
 import {useDispatch,useSelector} from "react-redux";
-import { getProductDetails } from '../../actions/productAction';
+import { getProductDetails } from '../../actions/productAction.js';
 import { useParams } from 'react-router-dom';
 import "./productDetails.css";
 import ReviewCard from './ReviewCard.js';
@@ -13,24 +13,25 @@ import Loading from '../layout/Loading/Loading.js';
 
 const ProductDetails=()=>{
     const {id}=useParams();
-    // console.log("id",`/api/product/${id}`)
     const dispatch=useDispatch();
+    console.log("1")
+    const {product,loading,error}=useSelector(state=>{
+      console.log(state)
+      return state.productDetails});
+    console.log("2",product)
+    useEffect(()=>{
+      console.log("3");
+      dispatch(getProductDetails(id));
+      console.log("4")
+    },[dispatch,id]);
     
-    const {product,loading}=useSelector(state=>state.productDetails);
-    console.log("hgfgdgfhg",product.images,loading);
-    useEffect(() => {
-        // console.log("hello from useEffect in productDetails.js",id)
-        dispatch(getProductDetails(id));
-       }
-     , [dispatch,id])
-    
-    
+    console.log("5")
     const options = {
       edit: false,
       color:"rgba(20,20,20,0.4)",
       activeColor:"tomato",
       size:window.innerWidth<725?13:18,
-      value:product.rating,
+      value:product?.rating || 0,
       isHalf:true
   };
     
