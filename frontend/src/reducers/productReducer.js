@@ -15,10 +15,13 @@ export const productReducer = (state = {products:[]},action) => {
                 products: [],
             };
         case ALL_PRODUCTS_SUCCESS:
-            console.log("from prdr",action.payload);
+
             return {
                 loading:false,
                 products:action.payload.products,
+                productsCount:action.payload.productsCount,
+                resultPerPage:action.payload.resultPerPage,
+                filteredProductsCount:action.payload.filteredProductsCount 
             }
         case ALL_PRODUCTS_FAIL:
             return {
@@ -44,7 +47,6 @@ export const productDetailsReducer=(state={product:{}},action)=>{
             }
             
         case PRODUCT_DETAILS_SUCCESS:
-            console.log('Reducer updating state with product:', action.payload);
             return{
                 loading:false,
                 product:action.payload.product,

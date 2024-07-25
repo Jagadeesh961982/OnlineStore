@@ -4,28 +4,27 @@ import { useEffect } from 'react';
 import Carousel from 'react-multi-carousel';
 import "react-multi-carousel/lib/styles.css";
 import {useDispatch,useSelector} from "react-redux";
-import { getProductDetails } from '../../actions/productAction.js';
+import { clearErrors, getProductDetails } from '../../actions/productAction.js';
 import { useParams } from 'react-router-dom';
 import "./productDetails.css";
 import ReviewCard from './ReviewCard.js';
 import Loading from '../layout/Loading/Loading.js';
+import MetaData from '../layout/MetaData.js';
 
 
 const ProductDetails=()=>{
     const {id}=useParams();
     const dispatch=useDispatch();
-    console.log("1")
-    const {product,loading,error}=useSelector(state=>{
-      console.log(state)
-      return state.productDetails});
-    console.log("2",product)
+    const {product,loading,error}=useSelector(state=>state.productDetails);
+
     useEffect(()=>{
-      console.log("3");
       dispatch(getProductDetails(id));
-      console.log("4")
-    },[dispatch,id]);
+      if(error){
+        dispatch(clearErrors());
+      }
+
+    },[dispatch,id,error]);
     
-    console.log("5")
     const options = {
       edit: false,
       color:"rgba(20,20,20,0.4)",
@@ -58,6 +57,7 @@ const ProductDetails=()=>{
     <>
     {loading?<Loading />:
     (<>
+      <MetaData title={`${product.name} --Ecommerce`} />
       <div className='productDetails'>
   
             {product.images &&

@@ -22,11 +22,17 @@ export const newProduct=async(req,res,next)=>{
 export const getAllProducts = async(req, res,next) => {
     // console.log("from getAllProducts")
     const resultPerPage = 8;
-    const apiFeature=new ApiFeatures(Product.find(),req.query).search().filter().pagination(resultPerPage);
+    const productsCount =await Product.countDocuments();
+
+    
     try{
-        const products=await apiFeature.query;
-        res.status(200).json({success:true,productsCount:products.length,products
-    })
+        let apiFeature=new ApiFeatures(Product.find(),req.query).search().filter();
+        let products=await apiFeature.query;
+        let filteredProductsCount=products.length;
+        apiFeature=new ApiFeatures(Product.find(),req.query).search().filter().pagination(resultPerPage);
+        products=await apiFeature.query;
+
+        res.status(200).json({success:true,products,productsCount, resultPerPage,filteredProductsCount})
     }catch(error){
         const err=new Error("products not found")
         err.status=404

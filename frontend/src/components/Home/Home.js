@@ -1,6 +1,6 @@
 import { CgMouse } from "react-icons/cg";
 import "./Home.css";
-import  Product from "./ProductCard.js";
+import  ProductCard from "./ProductCard.js";
 import MetaData from "../layout/MetaData.js";
 import { getProducts } from "../../actions/productAction.js";
 import {useDispatch,useSelector} from "react-redux";
@@ -39,7 +39,7 @@ const Home=()=>{
             <h2 className="homeHeading">Featured Products</h2>
             <div className="container" id="container">
                 {products && products.map(product=>(
-                    <Product key={product._id} product={product} />
+                    <ProductCard key={product._id} product={product} />
                 ))}
             </div>
             </>
