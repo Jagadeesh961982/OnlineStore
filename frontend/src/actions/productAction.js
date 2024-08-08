@@ -7,7 +7,6 @@ const baseUrl=process.env.REACT_APP_BASE_URL;
 export const getProducts=(keyword="",currentPage=1,price=[0,100000],category='',rating=0)=> async (dispatch) =>{
     try{
         dispatch({type:ALL_PRODUCTS_REQUEST});
-        console.log(category)
         let link=`${baseUrl}/api/products?keyword=${keyword}&page=${currentPage}&price[gte]=${price[0]}&price[lte]=${price[1]}&rating[gte]=${rating}`
         if(category){
             link=`${baseUrl}/api/products?keyword=${keyword}&page=${currentPage}&price[gte]=${price[0]}&price[lte]=${price[1]}&category=${category}&rating[gte]=${rating}`

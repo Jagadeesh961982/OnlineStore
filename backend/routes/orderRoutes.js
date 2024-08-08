@@ -7,7 +7,7 @@ const router=express.Router();
 // create a new order
 router.post("/order/new",isAuthenticatedUser,newOrder);
 
-// get single order details -- admin
+// get single order details
 router.get("/order/:id",isAuthenticatedUser,getSingleOrder);
 
 // get logged in user orders
@@ -19,7 +19,7 @@ router.get("/admin/orders",isAuthenticatedUser,authorizeRole("admin"),getAllOrde
 // update order status --admin
 router.put("/admin/order/:id",isAuthenticatedUser,authorizeRole("admin"),updateOrderStatus)
 
-// delete route --admin
+// delete order --admin
 router.delete("/admin/order/:id",isAuthenticatedUser,authorizeRole("admin"),deleteOrder)
 
 export default router;

@@ -1,4 +1,3 @@
-import axios from 'axios'
 import './loginSignup.css'
 import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -26,6 +25,7 @@ const LoginSignup= () => {
   })
   const [avatarPreview,setAvatarPreview]=useState(profile)
   const [avatar,setAvatar]=useState(profile)
+  const redirect=window.location.search?`/${window.location.search.split('=')[1]}`:"/account"
 
   const {name,email,password}=user
 
@@ -52,7 +52,6 @@ const LoginSignup= () => {
   
   const loginHandler=(e)=>{
     e.preventDefault()
-    console.log("hello")
     dispatch(userLogin(loginEmail,loginPassword))
   }
 
@@ -67,12 +66,12 @@ const LoginSignup= () => {
   }
 
   useEffect(()=>{
-    console.log("err",error)
+    // console.log("err",error)
     if(error){
       if(error.extraDetails!==""){
         toast.error(error.extraDetails)
       }else{
-        console.log(error)
+        // console.log(error)
         toast.error(error.message)
       }
       
@@ -80,9 +79,9 @@ const LoginSignup= () => {
     }
     if(isAuthenticated){
       toast("Successfully Login")
-      navigate("/account")
+      navigate(redirect)
     }
-  },[dispatch,error,isAuthenticated,navigate])
+  },[dispatch,error,isAuthenticated])
 
   const switchTabs=(e,tab)=>{
     if(tab==='login'){

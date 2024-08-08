@@ -1,15 +1,17 @@
+import dotenv from 'dotenv';
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import productRoutes from './routes/productRoute.js';
 import errorMidleware from './middleware/error_middleware.js';
 import userRoutes from "./routes/userRoutes.js";
-import cookieParser from 'cookie-parser';
 import orderRoutes from './routes/orderRoutes.js';
+import paymentRoutes from './routes/paymentRoute.js';
+import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import cloudinary from 'cloudinary';
 import fileUpload from 'express-fileupload';
+
 
 const app=express();
 app.use(express.json());
@@ -57,6 +59,9 @@ app.use("/api",userRoutes)
 
 // order routes
 app.use("/api",orderRoutes)
+
+// payment routes
+app.use("/api",paymentRoutes)
 
 // error middleware
 app.use(errorMidleware)

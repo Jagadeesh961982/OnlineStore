@@ -1,6 +1,6 @@
 
 import ReactStars from 'react-rating-stars-component';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Carousel from 'react-multi-carousel';
 import "react-multi-carousel/lib/styles.css";
 import {useDispatch,useSelector} from "react-redux";
@@ -10,12 +10,38 @@ import "./productDetails.css";
 import ReviewCard from './ReviewCard.js';
 import Loading from '../layout/Loading/Loading.js';
 import MetaData from '../layout/MetaData.js';
+import { addItemToCart } from '../../actions/cartActions.js';
+import {toast} from "react-toastify";
 
 
 const ProductDetails=()=>{
     const {id}=useParams();
     const dispatch=useDispatch();
     const {product,loading,error}=useSelector(state=>state.productDetails);
+    const [quantity,setQuantity]=useState(1);
+
+    const increaseQuantity=()=>{
+      if(product.stock>quantity && quantity<5){
+          setQuantity(quantity+1);
+      }
+      
+    }
+
+    const decreaseQuantity=()=>{
+      if(quantity>1){
+        setQuantity(quantity-1);
+      }
+    }
+
+    const addToCartHandler=()=>{
+      if(product.stock===0){
+        toast.error("This item is currently out of Stock")
+        return
+      }
+      dispatch(addItemToCart(id,quantity));
+      toast.success("Item Added to Cart");
+
+    }
 
     useEffect(()=>{
       dispatch(getProductDetails(id));
@@ -53,6 +79,8 @@ const ProductDetails=()=>{
       }
   };
 
+
+
   return (
     <>
     {loading?<Loading />:
@@ -60,35 +88,37 @@ const ProductDetails=()=>{
       <MetaData title={`${product.name} --Ecommerce`} />
       <div className='productDetails'>
   
-            {product.images &&
-              <div className='carouselContainer'>
-                <Carousel responsive={responsive}>
-                    {product.images.map((image) => (
-                      <div key={image._id}>
-                        <img src={image.url} alt={product.name} className='carouselImg' />
-                      </div>
-                    ))}
-                </Carousel>
-              </div>
-            }
+          {product.images &&
+            <div className='carouselContainer'>
+              <Carousel responsive={responsive} style={{zIndex:10}}>
+                  {product.images.map((image) => (
+                    <div key={image._id}>
+                      <img src={image.url} alt={product.name} className='carouselImg' />
+                    </div>
+                  ))}
+              </Carousel>
+            </div>
+          }
           
           
           <div className='productInfo'>
               <div className='productInfoBl-1'>
-                <h1>{product.name}</h1>
+                <h2>{product.name}</h2>
+                <p>Product #{product._id}</p>
               </div>
               <div className='productInfoBl-2'>
-                <ReactStars {...options} /> <span>({product.numOfReviews} Reviews)</span>
+                <ReactStars {...options} /> 
+                <span>({product.numOfReviews} Reviews)</span>
               </div>
-              <div className='productinfoBl-3'> 
+              <div className='productInfoBl-3'> 
                 <h3>Price: ₹{product.price}</h3>
-                <div className='productinfoBl-3-1'>
+                <div className='productInfoBl-3-1'>
                   <div className='productInfoBl-3-1-1'>
-                    <button>-</button>
-                    <input value={1} type='number'/>
-                    <button>+</button>
+                    <button onClick={decreaseQuantity}>-</button>
+                    <input readOnly value={quantity} type='number'/>
+                    <button onClick={increaseQuantity}>+</button>
                   </div>
-                  <button>Add to Cart</button>
+                  <button onClick={addToCartHandler}>Add to Cart</button>
                 </div>
                 <p>
                     Status:

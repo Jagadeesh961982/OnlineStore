@@ -15,16 +15,16 @@ export const registerUser=async(req,res,next)=>{
             crop:"scale"
         })
         let {name,email,password}=req.body;
-        console.log(myCloud.public_id,myCloud.secure_url,name,email,password)
+        // console.log(myCloud.public_id,myCloud.secure_url,name,email,password)
         const public_id=myCloud.public_id;
         const url=myCloud.secure_url;
-        console.log({
-            name,email,password,
-            avatar:{
-                public_id:String(public_id),
-                url:String(url)
-            }
-        })
+        // console.log({
+        //     name,email,password,
+        //     avatar:{
+        //         public_id:String(public_id),
+        //         url:String(url)
+        //     }
+        // })
         user=await User.create({
             name,email,password,
             avatar:{
@@ -32,7 +32,7 @@ export const registerUser=async(req,res,next)=>{
                 url:String(url)
             }
         })
-        console.log(user)
+        // console.log(user)
         sendToken(user,201,res)
     }catch(error){
         const err=new Error("Trouble in creating the user")
@@ -42,7 +42,6 @@ export const registerUser=async(req,res,next)=>{
             error.message="User already exists with this email"
 
         }
-        console.log(err)
         err.extraDetails=error.message
         next(err)
     }finally{
@@ -103,8 +102,9 @@ export const forgotPassword=async(req,res,next)=>{
         }   
         const resetToken=user.getResetPasswordToken();
         await user.save({validateBeforeSave:false});
-        // const resetPasswordUrl=`${req.protocol}://${req.get("host")}/api/password/reset/${resetToken}`
-        const resetPasswordUrl=`https://silver-meme-wpj94wvp56vhrx-5000.app.github.dev/api/password/reset/${resetToken}`
+        // console.log(req)
+        // const resetPasswordUrl=`${req.protocol}://${req.origin}/${req.path}/${resetToken}`
+        const resetPasswordUrl=`${process.env.FRONTEND_URL}/password/reset/${resetToken}`
         const message=`Your password reset token is:-\n\n${resetPasswordUrl}\n\nIf you have not requested this email, please ignore it`
         try{
             await sendEmail({
@@ -205,20 +205,42 @@ export const updatePassword=async(req,res,next)=>{
 
 // update the user profile
 export const updateProfile=async(req,res,next)=>{
+
     try{
-        const newuserData={
+        let newuserData={
             name:req.body.name,
             email:req.body.email
+        };
+        if(req.body.avatar!==""){
+        const user=await User.findById(req.user.id);
+        const image_id=user.avatar.public_id;
+        await cloudinary.v2.uploader.destroy(image_id);
+
+        const myCloud=await cloudinary.v2.uploader.upload(req.body.avatar,{
+            folder:"avatars",
+            width:150,
+            crop:"scale"
+        })
+        const public_id=myCloud.public_id;
+        const url=myCloud.secure_url;
+        newuserData.avatar={
+            public_id:String(public_id),
+            url:String(url)
         }
+    }
         const user=await User.findByIdAndUpdate(req.user.id,newuserData,{
             new:true,
             runValidators:true,
             useFindAndModify:false
         })
-        res.status(200).json({success:true,user})
+        res.status(200).json({success:true})
     }catch(error){
         const err=new Error("Trouble in updating user profile")
         err.status=400;
+        if(error.code===11000){
+            error.message="User already exists with this email"
+
+        }
         err.extraDetails=error.message
         next(err)
     }

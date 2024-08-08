@@ -4,6 +4,7 @@ import User from "../models/usersModel.js";
 export const isAuthenticatedUser=async(req,res,next)=>{
     try{
         const {token}=req.cookies;
+        // console.log(token)
         if(!token){
             const err=new Error("Login first to access this route")
             err.status=401;
