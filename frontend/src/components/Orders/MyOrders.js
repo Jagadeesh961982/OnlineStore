@@ -7,7 +7,8 @@ import { DataGrid } from '@mui/x-data-grid';
 import Loading from '../layout/Loading/Loading.js'
 import LaunchIcon from '@mui/icons-material/Launch';
 import {useDispatch, useSelector} from 'react-redux'
-import { getMyorders } from '../../actions/orderAction.js'
+import { clearErrors, getMyorders } from '../../actions/orderAction.js'
+import { toast } from 'react-toastify'
 
 const MyOrders = () => {
   const dispatch = useDispatch()
@@ -43,8 +44,17 @@ const MyOrders = () => {
   ))
 
   useEffect(()=>{
+    if(error){
+      if(error.extraDetails!==""){
+        toast.error(error.extraDetails)
+      }else{
+        // console.log(error)
+        toast.error(error.message)
+      }
+          dispatch(clearErrors())
+      }
     dispatch(getMyorders())
-  },[dispatch])
+  },[dispatch,error])
   return (
     <>
       <MetaData title={'My Orders'} />

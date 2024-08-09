@@ -89,24 +89,24 @@
 
 }
 
-.productCard p{
+.productCard > p{
     margin: 1vmax 0.5vmax;
     margin-bottom: 0;
     font-size: 1.4vmax;
 }
 
-.productCard div{
+.productCard > div{
     display: flex;
     justify-content: flex-start;
     align-items: center;
 }
 
-.productCard div span{
+.productCardSpan{
     margin-left: 0.5vmax;
     font:300 0.7vmax "Roboto", sans-serif;
 }
 
-.productCard span{
+.productCard > span{
     margin-top: 0.5vmax;
     margin-left: 0.5vmax;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;

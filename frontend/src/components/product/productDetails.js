@@ -1,10 +1,8 @@
-
-import ReactStars from 'react-rating-stars-component';
 import { useEffect, useState } from 'react';
 import Carousel from 'react-multi-carousel';
 import "react-multi-carousel/lib/styles.css";
 import {useDispatch,useSelector} from "react-redux";
-import { clearErrors, getProductDetails } from '../../actions/productAction.js';
+import { clearErrors, createNewReview, getProductDetails } from '../../actions/productAction.js';
 import { useParams } from 'react-router-dom';
 import "./productDetails.css";
 import ReviewCard from './ReviewCard.js';
@@ -12,13 +10,20 @@ import Loading from '../layout/Loading/Loading.js';
 import MetaData from '../layout/MetaData.js';
 import { addItemToCart } from '../../actions/cartActions.js';
 import {toast} from "react-toastify";
+import { Dialog,DialogActions,DialogContent,DialogTitle,Button, Rating } from '@mui/material';
 
 
 const ProductDetails=()=>{
     const {id}=useParams();
     const dispatch=useDispatch();
     const {product,loading,error}=useSelector(state=>state.productDetails);
+    const {success,error:reviewError}=useSelector(state=>state.review)
     const [quantity,setQuantity]=useState(1);
+    const [open,setOpen]=useState(false)
+    const [rating,setRating]=useState(0)
+    const [comment,setComment]=useState("")
+    
+
 
     const increaseQuantity=()=>{
       if(product.stock>quantity && quantity<5){
@@ -43,21 +48,49 @@ const ProductDetails=()=>{
 
     }
 
-    useEffect(()=>{
-      dispatch(getProductDetails(id));
-      if(error){
-        dispatch(clearErrors());
-      }
+    const sumbitReviewToggle=()=>{
+      open?setOpen(false):setOpen(true)
+    }
 
-    },[dispatch,id,error]);
+    const submitReviewHandler=()=>{
+      const myForm=new FormData()
+      myForm.set("rating",rating)
+      myForm.set("comment",comment)
+      myForm.set("productId",id)
+      dispatch(createNewReview(myForm))
+      setOpen(false)
+    }
+
+    useEffect(()=>{
+      if(error){
+        if(error.extraDetails!==""){
+          toast.error(error.extraDetails)
+        }else{
+          // console.log(error)
+          toast.error(error.message)
+        }
+            dispatch(clearErrors())
+        }
+        if(reviewError){
+          if(reviewError.extraDetails!==""){
+            toast.error(reviewError.extraDetails)
+          }else{
+            // console.log(error)
+            toast.error(reviewError.message)
+          }
+              dispatch(clearErrors())
+          }
+        if(success){
+          toast.success("Review saved successfully")
+        }
+      dispatch(getProductDetails(id));
+    },[dispatch,id,error,reviewError,success]);
     
     const options = {
-      edit: false,
-      color:"rgba(20,20,20,0.4)",
-      activeColor:"tomato",
-      size:window.innerWidth<725?13:18,
+      size:"large",
       value:product?.rating || 0,
-      isHalf:true
+      readOnly:true,
+      precision:0.5,
   };
     
     const responsive = {
@@ -107,7 +140,7 @@ const ProductDetails=()=>{
                 <p>Product #{product._id}</p>
               </div>
               <div className='productInfoBl-2'>
-                <ReactStars {...options} /> 
+                <Rating {...options} /> 
                 <span>({product.numOfReviews} Reviews)</span>
               </div>
               <div className='productInfoBl-3'> 
@@ -127,8 +160,40 @@ const ProductDetails=()=>{
                       </b>
                 </p>
               </div>
+              <div className='productInfoBl-4'>
+                <h1>Decription:</h1>
+                <p>{product.description}</p>
+                <button onClick={sumbitReviewToggle}>Submit Review</button>
+              </div>
           </div>
       </div>
+      <Dialog aria-labelledby='simple-dialog-title'
+        open={open}
+        onClose={sumbitReviewToggle}
+      >
+        <DialogTitle>Submit Review</DialogTitle>
+        <DialogContent className='submitDialog'>
+          <Rating name="simple-controlled"
+            value={rating}
+            onChange={(e) => {
+            setRating(e.target.value);}}
+            size="large"
+          />
+          <textarea
+            className='submitDialogTextArea'
+            cols="30"
+            rows="5" 
+            value={comment}
+            onChange={e=>setComment(e.target.value)}
+          >
+
+          </textarea>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={sumbitReviewToggle} color='secondary'>Cancel</Button>
+          <Button onClick={submitReviewHandler} color='primary'>Submit</Button>
+        </DialogActions>
+      </Dialog>
       <div className='reviewHeading'>
         <h2>Reviews</h2>
         {product.reviews && product.reviews[0] ?

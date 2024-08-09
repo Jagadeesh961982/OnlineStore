@@ -26,7 +26,6 @@ export const userRegister=(userData)=>async(dispatch)=>{
                 'Content-Type':'multipart/form-data'
             }
         })
-        console.log(response)
         dispatch({type:USER_REGISTER_SUCCESS,payload:response.data})
     }catch(error){
         console.log(error)

@@ -25,6 +25,7 @@ import Payment from './components/cart/Payment.js';
 import OrderSuccess from './components/cart/OrderSuccess.js';
 import MyOrders from './components/Orders/MyOrders.js';
 import OrderDetails from './components/Orders/OrderDetails.js';
+import Dashboard from './components/admin/Dashboard.js'
 import axios from 'axios';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
@@ -71,6 +72,7 @@ function App() {
         {isAuthenticated && <Route path='/success' element={<OrderSuccess/>} />}
         {isAuthenticated && <Route path='/orders' element={<MyOrders/>} />}
         {isAuthenticated && <Route path='orders/:id' element={<OrderDetails />} />}
+        {isAuthenticated && <Route path='/admin/dashboard' element={<Dashboard />} />}
 
       </Routes>
       <Footer />

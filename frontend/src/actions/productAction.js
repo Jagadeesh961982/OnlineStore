@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ALL_PRODUCTS_REQUEST, ALL_PRODUCTS_SUCCESS, ALL_PRODUCTS_FAIL, CLEAR_ERRORS,PRODUCT_DETAILS_FAIL,PRODUCT_DETAILS_REQUEST,PRODUCT_DETAILS_SUCCESS } from '../../src/constants/productConstants';
+import { ALL_PRODUCTS_REQUEST, ALL_PRODUCTS_SUCCESS, ALL_PRODUCTS_FAIL, CLEAR_ERRORS,PRODUCT_DETAILS_FAIL,PRODUCT_DETAILS_REQUEST,PRODUCT_DETAILS_SUCCESS, NEW_REVIEW_FAIL, NEW_REVIEW_REQUEST, NEW_REVIEW_SUCCESS } from '../../src/constants/productConstants';
 
 
 const baseUrl=process.env.REACT_APP_BASE_URL;
@@ -32,6 +32,24 @@ export const getProductDetails=(id)=>async (dispatch)=>{
         const errorMessage = error.response && error.response.data.message ? error.response.data.message : error.message;
         dispatch({type:PRODUCT_DETAILS_FAIL,payload:errorMessage});
         
+    }
+}
+
+export const createNewReview=(data)=>async(dispatch)=>{
+    try{
+        dispatch({type:NEW_REVIEW_REQUEST})
+        const config = {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+            withCredentials: true,
+          };
+        console.log(data)
+        const response=await axios.put(`${baseUrl}/api/review`,data,config)
+        console.log(response)
+        dispatch({type:NEW_REVIEW_SUCCESS,payload:response.data.success})
+    }catch(error){
+        dispatch({type:NEW_REVIEW_FAIL,payload:response.data.message})
     }
 }
 

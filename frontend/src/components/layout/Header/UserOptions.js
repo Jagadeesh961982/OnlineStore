@@ -32,7 +32,7 @@ const UserOptions = ({user}) => {
     }
     function dashboard(){
         // console.log('Dashboard')
-        navigate('/dashboard')
+        navigate('/admin/dashboard')
     }
     function account(){
         // console.log('Account')
