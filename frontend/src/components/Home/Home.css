@@ -84,12 +84,15 @@
 }
 
 .productCard img{
-    width:14vmax;
-    height: 14vmax;
+    width:90%;
+    height:70%;
 
 }
 
 .productCard > p{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     margin: 1vmax 0.5vmax;
     margin-bottom: 0;
     font-size: 1.4vmax;
@@ -119,7 +122,10 @@
 }
 
 @media  screen and (max-width: 768px) {
-    .productCard p{
+    .productCard > p{
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
         font-size: 1.7vmax;
     }
     .productCard div{

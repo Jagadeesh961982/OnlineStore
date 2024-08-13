@@ -1,14 +1,34 @@
 import {Product} from '../models/productModel.js'
 import ApiFeatures from '../utils/apifeatures.js';
-
+import cloudinary from "cloudinary";
 
 // create a Product --For Admin
 export const newProduct=async(req,res,next)=>{
     try{
+        let images=[];
+        if(typeof(req.body.images)==="string"){
+            images.push(req.body.images)
+        }else{
+            images=req.body.images
+        }
+        const imagesLinks=[]
+        
+        for(let i=0;i<images.length;i++){
+            const result=await cloudinary.v2.uploader.upload(images[i],{
+                folder:"products"
+            })
+            imagesLinks.push({
+                public_id:String(result.public_id),
+                url:String(result.secure_url)
+            })
+        }
+        req.body.images=imagesLinks;
+
         req.body.user=req.user.id;
         const product=await Product.create(req.body);
         res.status(201).json({success:true,product});
     }catch(error){
+        // console.log(error)
         const err=new Error("Trouble in creating the product");
         err.status=400;
         err.extraDetails=error.message
@@ -33,6 +53,27 @@ export const getAllProducts = async(req, res,next) => {
         products=await apiFeature.query;
 
         res.status(200).json({success:true,products,productsCount, resultPerPage,filteredProductsCount})
+    }catch(error){
+        const err=new Error("products not found")
+        err.status=404
+        err.extraDetails=error.message
+        next(err)
+    
+    }
+    
+}
+
+// get All Products --For Admin
+export const getAdminProducts = async(req, res,next) => {
+    // console.log("from getAllProducts")
+    const resultPerPage = 8;
+    const productsCount =await Product.countDocuments();
+
+    
+    try{
+        const products=await Product.find();
+
+        res.status(200).json({success:true,products})
     }catch(error){
         const err=new Error("products not found")
         err.status=404
@@ -68,6 +109,31 @@ export const getSingleProduct=async(req,res,next)=>{
 // update a product --For Admin
 export const updateProduct=async(req,res,next)=>{
     try{
+        if(req.body){
+            const product=await Product.findById(req.params.id);
+            const images=product.images;
+            for(let i=0;i<images.length;i++){
+                await cloudinary.v2.uploader.destroy(images[i].public_id)
+            }
+            let newImages=[];
+            if(typeof(req.body.images)==="string"){
+                newImages.push(req.body.images)
+            }else{
+                newImages=req.body.images
+            }
+            const imagesLinks=[]
+            for(let i=0;i<newImages.length;i++){
+                const result=await cloudinary.v2.uploader.upload(newImages[i],{
+                    folder:"products"
+                })
+                imagesLinks.push({
+                    public_id:String(result.public_id),
+                    url:String(result.secure_url)
+                })
+            }
+            req.body.images=imagesLinks;
+
+        }
         const upadtedProduct=await Product.findByIdAndUpdate(req.params.id,req.body,{
             new:true,
             runValidators:true,
@@ -92,6 +158,10 @@ export const updateProduct=async(req,res,next)=>{
 export const deleteProduct=async(req,res,next)=>{
     try{
         const product=await Product.findByIdAndDelete(req.params.id)
+        const images=product.images;
+        for(let i=0;i<images.length;i++){
+            await cloudinary.v2.uploader.destroy(images[i].public_id)
+        }
         if(!product){
             const err=new Error("product_id not found")
             err.status=404
@@ -112,7 +182,7 @@ export const deleteProduct=async(req,res,next)=>{
 // Create new review and update the review
 export const createProductReview=async(req,res,next)=>{
     try{
-    const {rating,comment,productId}=req.body;
+    const {rating,comment,productId}=req.body;3
     const review={
         user:req.user._id,
         name:req.user.name,
@@ -193,4 +263,9 @@ export const deleteReview=async(req,res,next)=>{
         next(err)   
     }
 }
+
+
+
+
+
 

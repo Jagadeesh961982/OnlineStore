@@ -46,7 +46,7 @@ const Sidebar = () => {
                         </Link>
                     </li>
                     <li>
-                        <Link to='/admin/product'>
+                        <Link to='/admin/product/new'>
                             <p><AddIcon /> Create Product</p>
                         </Link>
                     </li>

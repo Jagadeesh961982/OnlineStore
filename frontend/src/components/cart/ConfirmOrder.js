@@ -15,8 +15,9 @@ const ConfirmOrder = () => {
 
     const subtotal=cartItems.reduce((acc,item)=>acc+item.price*item.quantity,0)
     const shippingPrice=subtotal>=1000?0:50
-    const tax=subtotal*0.18
-    const total=subtotal+shippingPrice+tax
+    const tax=Math.round(subtotal*18)/100
+    
+    const total=Math.round((subtotal+shippingPrice+tax)*100)/100
 
     const proceedToPayment=()=>{
         const data={

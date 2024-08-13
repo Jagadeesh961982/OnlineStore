@@ -26,7 +26,7 @@ const OrderDetails = () => {
             dispatch(clearErrors())
         }
         dispatch(getOrderDetails(id))
-    },[dispatch,id])
+    },[dispatch,id,error])
   return (
     <>
         {loading?   <Loading/>  :(

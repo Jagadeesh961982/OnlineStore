@@ -102,14 +102,14 @@ export const updateOrderStatus=async(req,res,next)=>{
             error.status=404
             return next(error)
         }
-        order.orderItems.forEach(async item=>{
-            await updateStock(item.product,item.quantity)
-    
-        })
-    
+        
         order.orderStatus=orderStatus;
-        if(orderStatus==="Delivered"){
+        if(orderStatus==="Shipped"){
             order.deliveredAt=Date.now()
+            order.orderItems.forEach(async item=>{
+                await updateStock(item.product,item.quantity)
+        
+            })
         }
         await order.save({validateBeforeSave:false})
         res.status(200).json({success:true,order})

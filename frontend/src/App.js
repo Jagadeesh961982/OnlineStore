@@ -25,10 +25,16 @@ import Payment from './components/cart/Payment.js';
 import OrderSuccess from './components/cart/OrderSuccess.js';
 import MyOrders from './components/Orders/MyOrders.js';
 import OrderDetails from './components/Orders/OrderDetails.js';
-import Dashboard from './components/admin/Dashboard.js'
+import Dashboard from './components/Admin/Dashboard.js';
+import ProductList from './components/Admin/ProductList.js';
+import UpdateProduct from './components/Admin/UpdateProduct.js';
+import OrderList from './components/Admin/OrderList.js';
+import UpdateOrder from './components/Admin/UpdateOrder.js';
+import UsersList from './components/Admin/UsersList.js';
 import axios from 'axios';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
+import NewProduct from './components/Admin/NewProduct.js';
 
 function App() {
   const baseUrl=process.env.REACT_APP_BASE_URL;
@@ -72,8 +78,13 @@ function App() {
         {isAuthenticated && <Route path='/success' element={<OrderSuccess/>} />}
         {isAuthenticated && <Route path='/orders' element={<MyOrders/>} />}
         {isAuthenticated && <Route path='orders/:id' element={<OrderDetails />} />}
-        {isAuthenticated && <Route path='/admin/dashboard' element={<Dashboard />} />}
-
+        {isAuthenticated && user?.user?.isAdmin && <Route path='/admin/dashboard' element={<Dashboard />} />}
+        {isAuthenticated && user?.user?.isAdmin && <Route path='/admin/products' element={<ProductList />} />}
+        {isAuthenticated && user?.user?.isAdmin && <Route path='/admin/product/new' element={<NewProduct />} />}
+        {isAuthenticated && user?.user?.isAdmin && <Route path='/admin/product/:id' element={<UpdateProduct />} />}
+        {isAuthenticated && user?.user?.isAdmin && <Route path='/admin/orders' element={<OrderList />} />}
+        {isAuthenticated && user?.user?.isAdmin && <Route path='/admin/order/:id' element={<UpdateOrder />} />}
+        {isAuthenticated && user?.user?.isAdmin && <Route path='/admin/users' element={<UsersList />} />}
       </Routes>
       <Footer />
     </Router>

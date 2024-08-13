@@ -67,3 +67,33 @@
     background-color: rgb(104, 86, 86);
     color: rgb(255,255,255);
 }
+
+.lineChart{
+    width: 80%;
+    margin: auto;
+}
+
+.doughnutChart{
+    width: 30vmax;
+    margin: auto;
+}
+
+@media screen and (max-width: 660px){
+    .dashboard{
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+    .dashboardContainer{
+        border-left: none;
+    }
+    .dashboardSummary>div>p{
+        margin: 0;
+    }
+
+    .dashboardSummaryBox2 > a{
+        padding: 0.5rem;
+        margin: 1rem;
+        font: 300 0.9rem 'Roboto', sans-serif;
+    }
+}
+    
