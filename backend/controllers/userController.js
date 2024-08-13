@@ -265,7 +265,6 @@ export const getSingleUser=async(req,res,next)=>{
 
 // update user role by admin
 export const updateUserRole=async(req,res,next)=>{
-    console.log("its working")
     const user=await User.findById(req.params.id);
     if(!user){
         const err=new Error("User not found with this id")
