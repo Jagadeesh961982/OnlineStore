@@ -31,6 +31,7 @@ import UpdateProduct from './components/Admin/UpdateProduct.js';
 import OrderList from './components/Admin/OrderList.js';
 import UpdateOrder from './components/Admin/UpdateOrder.js';
 import UsersList from './components/Admin/UsersList.js';
+import UpdateUser from './components/Admin/UpdateUser.js';
 import axios from 'axios';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
@@ -85,6 +86,7 @@ function App() {
         {isAuthenticated && user?.user?.isAdmin && <Route path='/admin/orders' element={<OrderList />} />}
         {isAuthenticated && user?.user?.isAdmin && <Route path='/admin/order/:id' element={<UpdateOrder />} />}
         {isAuthenticated && user?.user?.isAdmin && <Route path='/admin/users' element={<UsersList />} />}
+        {isAuthenticated && user?.user?.isAdmin && <Route path='/admin/user/:id' element={<UpdateUser />} />}
       </Routes>
       <Footer />
     </Router>

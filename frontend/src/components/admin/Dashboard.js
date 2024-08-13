@@ -9,12 +9,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { clearErrors, getAdminProducts } from '../../actions/productAction.js'
 import { toast } from 'react-toastify'
 import { getAllOrders } from '../../actions/orderAction.js'
+import { getAllUseres } from '../../actions/userAction.js'
 
 Chart.register(CategoryScale,LinearScale, PointElement, LineElement,ArcElement, Title, Tooltip, Legend);
 const Dashboard = () => {
   const dispatch=useDispatch()
   const {error,products}=useSelector(state=>state.products)
   const {orders,totalAmount}=useSelector(state=>state.allOrders)
+  const {users}=useSelector(state=>state.allUsers)
   // const {orders}=useSelector(state=>state.orders)
   // const {users}=useSelector(state=>state.users)
 
@@ -63,6 +65,7 @@ const Dashboard = () => {
       }
     dispatch(getAdminProducts())
     dispatch(getAllOrders())
+    dispatch(getAllUseres())
   },[dispatch,error])
   return (
     <div className='dashboard'>
@@ -84,7 +87,7 @@ const Dashboard = () => {
                 </Link>
                 <Link to='/admin/users'>
                   <p>Users</p>
-                  <p>10</p>
+                  <p>{users.length}</p>
                 </Link>
               </div>
             </div>

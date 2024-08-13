@@ -142,8 +142,10 @@ export const getUserDetails=(id)=>async(dispatch)=>{
 export const updateUser=(id,userData)=>async(dispatch)=>{
     try{
         dispatch({type:UPDATE_USER_REQUEST})
-        const config={headers:{'Content-Type':'multipart/form-data'}}
+        const config={headers:{'Content-Type':'application/json'}}
+        console.log(id,userData)
         const response=await axios.put(`${baseUrl}/api/admin/user/${id}`,userData,config)
+        console.log("from actions")
         dispatch({type:UPDATE_USER_SUCCESS,payload:response.data.success})
     }catch(error){
         dispatch({type:UPDATE_USER_FAIL,payload:error.response.data.message})

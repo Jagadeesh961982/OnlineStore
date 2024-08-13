@@ -265,6 +265,7 @@ export const getSingleUser=async(req,res,next)=>{
 
 // update user role by admin
 export const updateUserRole=async(req,res,next)=>{
+    console.log("its working")
     const user=await User.findById(req.params.id);
     if(!user){
         const err=new Error("User not found with this id")
@@ -279,11 +280,16 @@ export const updateUserRole=async(req,res,next)=>{
 // delete user by admin
 export const deleteUser=async(req,res,next)=>{
     const user=await User.findByIdAndDelete(req.params.id);
+    if(user.avatar){
+        const image_id=user.avatar.public_id;
+        await cloudinary.v2.uploader.destroy(image_id)
+    }
     if(!user){
         const err=new Error("User not found with this id")
         err.status=404;
         return next(err)
     }  
+    
     res.status(200).json({success:true,message:"User deleted successfully"})
 }
 

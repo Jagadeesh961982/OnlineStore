@@ -4,7 +4,7 @@
 }
 
 .redColor{
-  color: red;
+  color: red !important;
 }
 
 .greenColor{
