@@ -3,7 +3,8 @@ import sendToken from "../utils/sendToken.js";
 import sendEmail from "../utils/sendEmail.js";
 import crypto from "crypto";
 import cloudinary from "cloudinary";
-import { stringify } from "querystring";
+import Feedbacks from "../models/feedbackModel.js";
+import { create } from "domain";
 
 // register a user
 export const registerUser=async(req,res,next)=>{
@@ -246,6 +247,84 @@ export const updateProfile=async(req,res,next)=>{
     }
 }
 
+// add the cart items
+export const addCartItems=async(req,res,next)=>{
+    try{
+        const user=await User.findById(req.user.id);
+        const {product,quantity,price,name,image,stock}=req.body;
+        
+        let isItemExist = false;
+        for (let item of user.cartItems) {
+            if (item.product === product) {
+                isItemExist = true;
+                break;
+            }
+        }
+        if(isItemExist){
+            user.cartItems.forEach(item=>{
+                if(item.product===product){
+                    item.quantity=quantity;
+                }
+            })
+            await user.save();
+            res.status(200).json({success:true})
+            return  
+        }
+
+        const item={
+            product,
+            quantity,
+            price,
+            name,
+            image,
+            stock
+        }
+
+        user.cartItems.push(item);
+        await user.save();
+        res.status(200).json({success:true})
+    }catch(error){
+        const err=new Error("Trouble in adding cart items")
+        err.status=400;
+        err.extraDetails=error.message
+        next(err)
+    }
+}
+
+// get the cart items
+export const getAllCartItems=async(req,res,next)=>{
+    try{
+        const user=await User.findById(req.user.id)
+        res.status(200).json({success:true,cartItems:user.cartItems})
+    }catch(error){
+        const err=new Error("Trouble in fetching cart items")
+        err.status=400;
+        err.extraDetails=error.message
+        next(err)
+    }
+}
+
+// remove the cart items
+export const removeCartItems=async(req,res,next)=>{
+    try{
+        const user=await User.findById(req.user.id);
+        const product_id=req.body.product;
+        for(let item of user.cartItems){
+            if(item.product===product_id){
+                const index=user.cartItems.indexOf(item);
+                user.cartItems.splice(index,1);
+                break;
+            }
+        }
+        await user.save();
+        res.status(200).json({success:true})
+    }catch(error){
+        const err=new Error("Trouble in removing cart items")
+        err.status=400;
+        err.extraDetails=error.message
+        next(err)
+    }
+}
 // get all users
 export const getAllUsers=async(req,res,next)=>{
     const users=await User.find();
@@ -292,3 +371,63 @@ export const deleteUser=async(req,res,next)=>{
     res.status(200).json({success:true,message:"User deleted successfully"})
 }
 
+// feedback by user
+export const feedback=async(req,res,next)=>{
+    try{
+        // console.log(req.body)
+        const {id,message}=req.body;
+        const feed=await Feedbacks.create({
+            userId:id,
+            feedback:message
+        })
+        // console.log(feed)
+        res.status(200).json({success:true,message:"Feedback submitted successfully"})
+    }catch(error){
+        const err=new Error("Trouble in submitting feedback")
+        err.status=400;
+        err.extraDetails=error.message
+        next(err)
+    }
+}
+
+// get all feedbacks by admin
+export const getAllFeedbacks=async(req,res,next)=>{
+    try{
+        const feedbacks=await Feedbacks.find();
+        const feeds = await Promise.all(feedbacks.map(async (feed) => {
+            const user = await User.findById(feed.userId);
+            return {
+                id: feed._id,
+                userId: user._id,
+                name: user.name,
+                email: user.email,
+                feedback: feed.feedback,
+                createdAt: feed.createdAt
+            };
+        }));
+    res.status(200).json({success:true,feeds})
+    }catch(error){
+        const err=new Error("Trouble in fetching feedbacks")
+        err.status=400;
+        err.extraDetails=error.message
+        next(err)
+    }
+}
+
+// delete feedback by admin
+export const deleteFeedback=async(req,res,next)=>{
+    try{
+        const feedback=await Feedbacks.findByIdAndDelete(req.params.id);
+        if(!feedback){
+            const err=new Error("Feedback not found with this id")
+            err.status=404;
+            return next(err)
+        }
+        res.status(200).json({success:true,message:"Feedback deleted successfully"})
+    }catch(error){
+        const err=new Error("Trouble in deleting feedback")
+        err.status=400;
+        err.extraDetails=error.message
+        next(err)
+    }
+}

@@ -20,9 +20,9 @@ const UpdateUser = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const {id:userId}=useParams()
-    const { loading, error,user} = useSelector(state => state.userLoginRegister)
+    const { loading, error,user} = useSelector(state => state.allUsers)
     const {error:updatedError,isUpdated}=useSelector(state=>state.user)
-    const [role,setRole]=useState(user?.user?.isAdmin?'Admin':'User'||'User')
+    const [role,setRole]=useState('')
 
 
     const submitHandler = (e) => {
@@ -31,8 +31,8 @@ const UpdateUser = () => {
     }
     
     useEffect(() => {
-        if(user?.user && user?.user?._id!==userId){
-          dispatch(getUserDetails(userId))
+        if(user?.user?._id!==userId){
+             dispatch(getUserDetails(userId))
         }
         if (error) {
             toast.error(error.extraDetails?error.extraDetails:error.message)
@@ -41,7 +41,7 @@ const UpdateUser = () => {
         if(updatedError){
           toast.error(updatedError.extraDetails?updatedError.extraDetails:updatedError.message)
         }
-        if (isUpdated?.success) {
+        if (isUpdated) {
             toast.success('User role updated successfully')
             dispatch({ type: UPDATE_USER_RESET })
             navigate('/admin/users')
@@ -65,7 +65,7 @@ const UpdateUser = () => {
                         </div>
                         <div>
                             <VerifiedUserIcon />
-                            <select value={role} onChange={e => setRole(e.target.value)}>
+                            <select value={user?.user?.isAdmin?'Admin':'User'} onChange={e => setRole(e.target.value)}>
                                 <option value=''>Select Role</option>
                                 <option value='Admin'>Admin</option>
                                 <option value='User'>User</option>

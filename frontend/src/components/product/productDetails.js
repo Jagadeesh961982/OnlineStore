@@ -8,15 +8,17 @@ import "./productDetails.css";
 import ReviewCard from './ReviewCard.js';
 import Loading from '../layout/Loading/Loading.js';
 import MetaData from '../layout/MetaData.js';
-import { addItemToCart } from '../../actions/cartActions.js';
+import { addItemToCart, getCartItems } from '../../actions/cartActions.js';
 import {toast} from "react-toastify";
 import { Dialog,DialogActions,DialogContent,DialogTitle,Button, Rating } from '@mui/material';
+import { ADD_TO_CART_RESET } from '../../constants/cartConstants.js';
 
 
 const ProductDetails=()=>{
     const {id}=useParams();
     const dispatch=useDispatch();
     const {product,loading,error}=useSelector(state=>state.productDetails);
+    const {isAddedtoCart}=useSelector(state=>state.cart)
     const {success,error:reviewError}=useSelector(state=>state.review)
     const [quantity,setQuantity]=useState(1);
     const [open,setOpen]=useState(false)
@@ -43,9 +45,15 @@ const ProductDetails=()=>{
         toast.error("This item is currently out of Stock")
         return
       }
-      dispatch(addItemToCart(id,quantity));
-      toast.success("Item Added to Cart");
-
+      const cartItem={
+        product:product._id,
+        name:product.name,
+        price:product.price,
+        image:product.images[0].url,
+        stock:product.stock,
+        quantity
+      }
+      dispatch(addItemToCart(cartItem));
     }
 
     const sumbitReviewToggle=()=>{
@@ -80,11 +88,15 @@ const ProductDetails=()=>{
           }
               dispatch(clearErrors())
           }
+        if(isAddedtoCart){
+          toast.success("Item added to cart successfully")
+          dispatch({type:ADD_TO_CART_RESET})
+        }
         if(success){
           toast.success("Review saved successfully")
         }
       dispatch(getProductDetails(id));
-    },[dispatch,id,error,reviewError,success]);
+    },[dispatch,id,error,reviewError,success,isAddedtoCart]);
     
     const options = {
       size:"large",

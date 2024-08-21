@@ -1,4 +1,4 @@
-import {loginUser, registerUser,logOutUser,forgotPassword,resetPassword,userDetails, updatePassword, updateProfile, getAllUsers, getSingleUser, updateUserRole, deleteUser} from "../controllers/userController.js";
+import {loginUser, registerUser,logOutUser,forgotPassword,resetPassword,userDetails, updatePassword, updateProfile, getAllUsers, getSingleUser, updateUserRole, deleteUser, feedback, getAllFeedbacks, deleteFeedback, addCartItems, removeCartItems, getAllCartItems} from "../controllers/userController.js";
 import {authorizeRole, isAuthenticatedUser} from "../middleware/authenticaton.js";
 import express from "express";
 
@@ -31,6 +31,18 @@ router.put("/password/update",isAuthenticatedUser,updatePassword)
 // update user profile
 router.put("/profile/update",isAuthenticatedUser,updateProfile)
 
+// add cart items
+router.put("/cart/add",isAuthenticatedUser,addCartItems)
+
+// get cart items
+router.get("/cart",isAuthenticatedUser,getAllCartItems)
+
+// remove cart items
+router.put("/cart/remove",isAuthenticatedUser,removeCartItems)
+
+// feedback by user
+router.put("/feedback",isAuthenticatedUser,feedback)
+
 // get all users (admin)
 router.get("/admin/users",isAuthenticatedUser,authorizeRole("admin"),getAllUsers)
 
@@ -42,5 +54,11 @@ router.put("/admin/user/:id",isAuthenticatedUser,authorizeRole("admin"),updateUs
 
 // delete user by (admin)
 router.delete("/admin/user/:id",isAuthenticatedUser,authorizeRole("admin"),deleteUser)
+
+// get All user Feedbacks by admin
+router.get("/admin/feedbacks",isAuthenticatedUser,authorizeRole("admin"),getAllFeedbacks)
+
+// delete feedback by admin
+router.delete("/admin/feedback/:id",isAuthenticatedUser,authorizeRole("admin"),deleteFeedback)
 
 export default router;

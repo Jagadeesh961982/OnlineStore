@@ -4,25 +4,25 @@ import Header from './components/layout/Header/Header.js';
 import Footer from './components/layout/Footer/Footer.js';
 import Home from './components/Home/Home.js';
 import {BrowserRouter as Router,Routes,Route} from "react-router-dom"
-import ProductDetails from './components/product/ProductDetails.js';
-import Products from './components/product/Products.js';
-import Search from "./components/product/Search.js";
-import LoginSignup from './components/userAuth/LoginSignup.js';
-import Profile from './components/userAuth/Profile.js';
+import ProductDetails from './components/Product/ProductDetails.js';
+import Products from './components/Product/Products.js';
+import Search from "./components/Product/Search.js";
+import LoginSignup from './components/UserAuth/LoginSignup.js';
+import Profile from './components/UserAuth/Profile.js';
 import store from './store.js';
 import { useEffect, useState } from 'react';
 import { loadUser } from './actions/userAction.js';
 import { useDispatch,useSelector } from 'react-redux';
 import UserOptions from './components/layout/Header/UserOptions.js';
-import UpdateProfile from './components/userAuth/UpdateProfile.js';
-import UpdatePassword from './components/userAuth/UpdatePassword.js';
-import ForgotPassword from './components/userAuth/ForgotPassword.js';
-import ResetPassword from './components/userAuth/ResetPassword.js';
-import Cart from './components/cart/Cart.js';
-import Shipping from './components/cart/Shipping.js';
-import ConfirmOrder from './components/cart/ConfirmOrder.js';
-import Payment from './components/cart/Payment.js';
-import OrderSuccess from './components/cart/OrderSuccess.js';
+import UpdateProfile from './components/UserAuth/UpdateProfile.js';
+import UpdatePassword from './components/UserAuth/UpdatePassword.js';
+import ForgotPassword from './components/UserAuth/ForgotPassword.js';
+import ResetPassword from './components/UserAuth/ResetPassword.js';
+import Cart from './components/Cart/Cart.js';
+import Shipping from './components/Cart/Shipping.js';
+import ConfirmOrder from './components/Cart/ConfirmOrder.js';
+import Payment from './components/Cart/Payment.js';
+import OrderSuccess from './components/Cart/OrderSuccess.js';
 import MyOrders from './components/Orders/MyOrders.js';
 import OrderDetails from './components/Orders/OrderDetails.js';
 import Dashboard from './components/Admin/Dashboard.js';
@@ -32,6 +32,10 @@ import OrderList from './components/Admin/OrderList.js';
 import UpdateOrder from './components/Admin/UpdateOrder.js';
 import UsersList from './components/Admin/UsersList.js';
 import UpdateUser from './components/Admin/UpdateUser.js';
+import Feedbacks from './components/Admin/Feedbacks.js';
+import ProductReviews from './components/Admin/ProductReviews.js';
+import Contact from './components/Contact/Contact.js';
+import About from './components/About/About.js';
 import axios from 'axios';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
@@ -87,6 +91,11 @@ function App() {
         {isAuthenticated && user?.user?.isAdmin && <Route path='/admin/order/:id' element={<UpdateOrder />} />}
         {isAuthenticated && user?.user?.isAdmin && <Route path='/admin/users' element={<UsersList />} />}
         {isAuthenticated && user?.user?.isAdmin && <Route path='/admin/user/:id' element={<UpdateUser />} />}
+        {isAuthenticated && user?.user?.isAdmin && <Route path='/admin/reviews' element={<ProductReviews />} />}
+        {isAuthenticated && user?.user?.isAdmin && <Route path='/admin/feedbacks' element={<Feedbacks />} />}
+        {isAuthenticated && <Route path='/contact' element={<Contact />} />}
+        <Route path='/about' element={<About />} />
+
       </Routes>
       <Footer />
     </Router>

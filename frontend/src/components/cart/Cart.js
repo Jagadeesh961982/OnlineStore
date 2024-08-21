@@ -1,19 +1,31 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './cart.css'
 import CartItemCard from './CartItemCard.js'
-import {useSelector} from "react-redux"
+import {useDispatch, useSelector} from "react-redux"
 import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
 import { Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { clearErrors } from '../../actions/userAction.js';
+import { getCartItems } from '../../actions/cartActions.js';
 
 const Cart = () => {
     const navigate=useNavigate()
-    const {cartItems}=useSelector(state=>state.cart)
+    const dispatch=useDispatch()
+    const {cartItems,loading,error}=useSelector(state=>state.cart)
+    // console.log(user?.user?.cartItems)
 
     const checkoutHandler=()=>{
         navigate('/login?redirect=shipping')
     }
+    useEffect(()=>{
+        if(error){
+            toast.error(error.extraDetails?error.extraDetails:error.message)
+            dispatch(clearErrors())
+        }
+        dispatch(getCartItems())
+    },[error,dispatch])
   return (
     <>
         <div className='cartContainerHome'>

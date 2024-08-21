@@ -11,6 +11,7 @@ import ListAltIcon from '@mui/icons-material/ListAlt';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import RateReviewIcon from '@mui/icons-material/RateReview';
 import PeopleIcon from '@mui/icons-material/People';
+import FeedbackIcon from '@mui/icons-material/Feedback';
 
 // import {SimpleTreeView , TreeItem} from '@mui/x-tree-view'
 
@@ -64,7 +65,9 @@ const Sidebar = () => {
             <Link to='/admin/reviews'> 
                 <p><RateReviewIcon /> Reviews</p>
             </Link>
-        
+            <Link to='/admin/feedbacks'>
+                <p><FeedbackIcon />Feedbacks</p>
+            </Link>
     </div>
   )
 }

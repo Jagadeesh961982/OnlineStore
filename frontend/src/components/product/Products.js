@@ -1,7 +1,7 @@
 import React,{useState}from 'react'
 import "./products.css"
 import { useSelector,useDispatch } from 'react-redux'
-import { getProducts,clearErrors } from '../../actions/productAction'
+import { getProducts,clearErrors } from '../../actions/productAction.js'
 import { useEffect } from 'react'
 import Loading from '../layout/Loading/Loading.js'
 import ProductCard from '../Home/ProductCard.js'
@@ -25,7 +25,7 @@ const ProductDetails = () => {
     const [category,setCategory]=useState('');
     const [rating,setRating]=useState(0);
 
-    console.log(category)
+    // console.log(category)
 
 
     const setCurrentPageNo=(e)=>{

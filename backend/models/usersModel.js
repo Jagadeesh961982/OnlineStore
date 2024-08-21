@@ -38,6 +38,36 @@ const userSchema=new mongoose.Schema({
         type:Boolean,
         default:false
     },
+    cartItems:[
+        {
+            product:{
+                type:String,
+                required:true
+            },
+            quantity:{
+                type:Number,
+                required:true
+            },
+            price:{
+                type:Number,
+                required:true
+            },
+            name:{
+                type:String,
+                required:true
+            },
+            image:{
+                type:String,
+                required:true
+            },
+            stock:{
+                type:Number,
+                required:true
+            }
+
+
+        }
+    ],
     resetPasswordToken:String,
     resetPasswordExpire:Date
     },

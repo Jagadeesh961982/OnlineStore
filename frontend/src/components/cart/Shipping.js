@@ -9,7 +9,7 @@ import PublicIcon from '@mui/icons-material/Public';
 import PhoneIcon from '@mui/icons-material/Phone';
 import TransferWithinAStationIcon from '@mui/icons-material/TransferWithinAStation';
 import {Country,State} from 'country-state-city'
-import MetaData from '../layout/MetaData'
+import MetaData from '../layout/MetaData.js'
 import CheckoutSteps from './CheckoutSteps.js';
 import {toast} from 'react-toastify'
 import {useNavigate} from 'react-router-dom'

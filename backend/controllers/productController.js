@@ -106,7 +106,7 @@ export const getSingleProduct=async(req,res,next)=>{
     
 }
 
-// update a product --For Admin
+// update a product --By Admin
 export const updateProduct=async(req,res,next)=>{
     try{
         if(req.body){
@@ -154,7 +154,7 @@ export const updateProduct=async(req,res,next)=>{
     
 }
 
-// delete a product --For Admin
+// delete a product --By Admin
 export const deleteProduct=async(req,res,next)=>{
     try{
         const product=await Product.findByIdAndDelete(req.params.id)
@@ -229,8 +229,8 @@ export const createProductReview=async(req,res,next)=>{
 // get all reviews of a product
 export const getProductReviews=async(req,res,next)=>{
     try{
-    const product=await Product.findById(req.query.productId);
-    res.status(200).json({success:true,reviews:product.reviews})
+        const product=await Product.findById(req.query.productId);
+        res.status(200).json({success:true,reviews:product.reviews})
 }catch(error){
     const err=new Error("product not found")
     err.status=404
@@ -240,22 +240,30 @@ export const getProductReviews=async(req,res,next)=>{
 }
 }
 
-// Delete Reviews
+// Delete Reviews --By Admin
 export const deleteReview=async(req,res,next)=>{
     try{
+        // console.log("working")
+        // console.log(req.query)
+        // console.log("1")
     const product=await Product.findById(req.query.productId);
+    // console.log(product)
+    // console.log("2")
     if(!product){
         const err=new Error("product not found")
         err.status=404
         return next(err)
     }
     const reviews=product.reviews.filter(rev=>rev._id.toString()!==req.query.id.toString());
+    // console.log("3")
     let avg=0
     reviews.forEach(rev=>avg+=rev.rating);
-    const rating=avg/reviews.length;
+    const rating=avg/(reviews.length || 1);
     const numOfReviews=reviews.length;
+    // console.log(rating,numOfReviews,avg)
     await Product.findByIdAndUpdate(req.query.productId,{reviews,rating,numOfReviews},{new:true,runValidators:true,useFindAndModify:false});
-    res.status(200).json({success:true})
+    // console.log("4")
+    res.status(200).json({success:true,message:"review deleted successfully"})
     }catch(error){
         const err=new Error("can not delete the review, please try again later")
         err.status=404

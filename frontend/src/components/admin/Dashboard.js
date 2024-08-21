@@ -83,11 +83,11 @@ const Dashboard = () => {
                 </Link>
                 <Link to='/admin/orders'>
                   <p>Orders</p>
-                  <p>{orders.length}</p>
+                  <p>{orders?.length}</p>
                 </Link>
                 <Link to='/admin/users'>
                   <p>Users</p>
-                  <p>{users.length}</p>
+                  <p>{users?.length}</p>
                 </Link>
               </div>
             </div>

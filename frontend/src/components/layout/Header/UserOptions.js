@@ -18,9 +18,9 @@ import { useSelector } from 'react-redux';
 const UserOptions = ({user}) => {
     const navigate=useNavigate()
     const dispatch=useDispatch()
-
     const {cartItems}=useSelector(state=>state.cart)
     const [open, setOpen] = useState(false)
+    console.log(user)
     const actions = [
         { icon: <PersonIcon />, name: 'Profile', func:account},
         { icon: <ShoppingCartIcon style={{color:cartItems.length>0?"tomato":"unset"}}/>, name: `Cart(${cartItems.length})`, func:Cart},
