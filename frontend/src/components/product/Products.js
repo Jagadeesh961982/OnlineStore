@@ -4,7 +4,7 @@ import { useSelector,useDispatch } from 'react-redux'
 import { getProducts,clearErrors } from '../../actions/productAction.js'
 import { useEffect } from 'react'
 import Loading from '../layout/Loading/Loading.js'
-import ProductCard from '../Home/ProductCard.js'
+import ProductCard from '../home/ProductCard.js'
 import { useParams } from 'react-router-dom';
 import Pagination from 'react-js-pagination';
 import Slider from '@mui/material/Slider';

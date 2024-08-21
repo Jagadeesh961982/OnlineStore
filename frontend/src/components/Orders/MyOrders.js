@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import './myOrders.css'
 import { Typography } from '@mui/material'
 import { Link } from 'react-router-dom'
-import MetaData from '../layout/MetaData'
+import MetaData from '../layout/MetaData.js'
 import { DataGrid } from '@mui/x-data-grid';
 import Loading from '../layout/Loading/Loading.js'
 import LaunchIcon from '@mui/icons-material/Launch';

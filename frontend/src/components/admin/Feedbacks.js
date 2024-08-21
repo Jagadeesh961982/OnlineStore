@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@mui/material';
 import { toast } from 'react-toastify';
 import { DataGrid } from '@mui/x-data-grid';
-import MetaData from '../layout/MetaData';
+import MetaData from '../layout/MetaData.js';
 import Loading from '../layout/Loading/Loading.js';
 import Sidebar from './Sidebar.js';
 import DeleteIcon from '@mui/icons-material/Delete';
