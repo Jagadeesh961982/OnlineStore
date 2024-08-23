@@ -18,7 +18,7 @@ const ProductDetails=()=>{
     const {id}=useParams();
     const dispatch=useDispatch();
     const {product,loading,error}=useSelector(state=>state.productDetails);
-    const {isAddedtoCart}=useSelector(state=>state.cart)
+    const {message}=useSelector(state=>state.cartItem)
     const {success,error:reviewError}=useSelector(state=>state.review)
     const [quantity,setQuantity]=useState(1);
     const [open,setOpen]=useState(false)
@@ -88,15 +88,16 @@ const ProductDetails=()=>{
           }
               dispatch(clearErrors())
           }
-        if(isAddedtoCart){
-          toast.success("Item added to cart successfully")
+        if(message){
+          dispatch(getCartItems())
           dispatch({type:ADD_TO_CART_RESET})
+          
         }
         if(success){
           toast.success("Review saved successfully")
         }
       dispatch(getProductDetails(id));
-    },[dispatch,id,error,reviewError,success,isAddedtoCart]);
+    },[dispatch,id,error,reviewError,success,message]);
     
     const options = {
       size:"large",

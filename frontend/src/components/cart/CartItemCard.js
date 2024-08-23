@@ -5,16 +5,24 @@ import { addItemToCart, getCartItems, removeItemFromCart } from '../../actions/c
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { clearErrors } from '../../actions/userAction';
-import { REMOVE_CART_ITEMS_RESET } from '../../constants/cartConstants';
+import { ADD_TO_CART_RESET, REMOVE_CART_ITEM_RESET } from '../../constants/cartConstants';
 
 const CartItemCard = ({item}) => {
   const dispatch=useDispatch();
-  const {isDeleted,loading,error}=useSelector(state=>state.cart)
+  const {isDeleted,loading,error,message}=useSelector(state=>state.cartItem)
+  console.log(isDeleted,loading,error,message)
+  const {cartItems}=useSelector(state=>state.allCartItems)
   const [quantity,setQuantity]=useState(item.quantity);
 
   const increaseQuantity=()=>{
     if(item.stock>quantity && quantity<5){
-        setQuantity(quantity+1);
+        setQuantity((quantity)=>quantity+1);
+        const cartItem={
+          ...item,
+          quantity:quantity+1
+        }
+
+        dispatch(addItemToCart(cartItem));
     }
     else{
       toast.success(`we are sorry!,only ${quantity} item(s) allowed in each order`)
@@ -22,12 +30,18 @@ const CartItemCard = ({item}) => {
   }
   const decreaseQuantity=()=>{
     if(quantity>1){
-      setQuantity(quantity-1);
+      setQuantity((quantity)=>quantity-1);
+      const cartItem={
+        ...item,
+        quantity:quantity-1
+      }
+      // console.log(cartItem)
+      dispatch(addItemToCart(cartItem));
     } 
   }
 
   const removeItem=()=>{
-    dispatch(removeItemFromCart(item.product));
+    dispatch(removeItemFromCart(item.product,item.name));
 
   }
 
@@ -37,21 +51,27 @@ const CartItemCard = ({item}) => {
       dispatch(clearErrors());
     }
     if(isDeleted){
-      toast.success(`${item.name} removed from cart`);
-      dispatch({type:REMOVE_CART_ITEMS_RESET})
+      dispatch({type:REMOVE_CART_ITEM_RESET})
+      dispatch(getCartItems())
     }
-    const cartItem={
-      product:item.product,
-      name:item.name,
-      price:item.price,
-      image:item.image,
-      stock:item.stock,
-      quantity
-    }
-    dispatch(addItemToCart(cartItem));
-    toast.success(`Quantity of ${item.name} updated to ${quantity}`);
+    
+    // console.log(isAdded,isDeleted,quantity,error)
+    
+    // if(isAdded){
+    //   dispatch(getCartItems())
+    //   toast.success(`Quantity of ${item.name} updated to ${quantity}`);
+    //   // dispatch(getCartItems())
+    //   dispatch({type:ADD_TO_CART_RESET})
 
-  },[dispatch,quantity,toast,item,isDeleted,error])
+    // }
+    // if(message){
+    //   dispatch(getCartItems())
+    //   console.log(message)
+    //   dispatch({type:ADD_TO_CART_RESET})
+    // }
+    
+
+  },[isDeleted,error,message])
   return (
     <>
         <div className='cartItemCardContainer'>
@@ -69,7 +89,7 @@ const CartItemCard = ({item}) => {
                 <button onClick={increaseQuantity}>+</button>
           </div>
           <div className='cartItemTotal'>
-            <span>{`₹${item.price*item.quantity}`}</span>
+            <span>{`₹${item.price*quantity}`}</span>
           </div>
         </div>
     </>

@@ -9,7 +9,7 @@ import { Typography } from '@mui/material'
 
 const ConfirmOrder = () => {
     const navigate=useNavigate()
-    const {shippingInfo,cartItems}=useSelector(state=>state.cart)
+    const {shippingInfo,cartItems}=useSelector(state=>state.allCartItems)
     const {user}=useSelector(state=>state.userLoginRegister)
     const address=`${shippingInfo.address},${shippingInfo.city},${shippingInfo.state},${shippingInfo.country},${shippingInfo.pincode}`
 

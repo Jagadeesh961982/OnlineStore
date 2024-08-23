@@ -53,6 +53,7 @@ const LoginSignup= () => {
   const loginHandler=(e)=>{
     e.preventDefault()
     dispatch(userLogin(loginEmail,loginPassword))
+    
   }
 
   const signUpHandler=(e)=>{
@@ -78,7 +79,6 @@ const LoginSignup= () => {
       dispatch(clearErrors())
     }
     if(isAuthenticated){
-      toast("Successfully Login")
       navigate(redirect)
     }
   },[dispatch,error,isAuthenticated])

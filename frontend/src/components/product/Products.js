@@ -45,6 +45,7 @@ const ProductDetails = () => {
   return (
     <>
       {loading ? <Loading /> :(
+        filteredProductsCount===0 ? <h1 className='noProducts'>No Products Found</h1> :(
         <>
           <MetaData title={'Products --Ecommerce'} />
           <h1 className='productsHeading'>Products</h1>
@@ -105,6 +106,7 @@ const ProductDetails = () => {
           </div>
 
         </>
+      )
       )}
     </>
   )

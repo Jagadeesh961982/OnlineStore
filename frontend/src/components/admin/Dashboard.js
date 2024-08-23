@@ -74,7 +74,7 @@ const Dashboard = () => {
             <Typography component="h1">Dashboard</Typography>
             <div className='dashboardSummary'>
               <div className='dashboardSummaryBox1'>
-                <p>Total Amount <br />{totalAmount}</p>
+                <p>Total Amount <br />{Math.round(totalAmount*100)/100}</p>
               </div>
               <div className='dashboardSummaryBox2'>
                 <Link to='/admin/products'>

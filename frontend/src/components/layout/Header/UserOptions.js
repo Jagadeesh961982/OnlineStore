@@ -13,17 +13,14 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { userLogout } from '../../../actions/userAction';
-import { useSelector } from 'react-redux';
 
-const UserOptions = ({user}) => {
+const UserOptions = ({user,items}) => {
     const navigate=useNavigate()
     const dispatch=useDispatch()
-    const {cartItems}=useSelector(state=>state.cart)
-    const [open, setOpen] = useState(false)
-    console.log(user)
+    const [open, setOpen] = useState(false);
     const actions = [
         { icon: <PersonIcon />, name: 'Profile', func:account},
-        { icon: <ShoppingCartIcon style={{color:cartItems.length>0?"tomato":"unset"}}/>, name: `Cart(${cartItems.length})`, func:Cart},
+        { icon: <ShoppingCartIcon style={{color:items.length>0?"tomato":"unset"}}/>, name: `Cart(${items.length})`, func:Cart},
         { icon: <ListAltIcon />, name: 'Orders', func:orders},
         { icon: <ExitToAppIcon />, name: 'Logout', func:logoutUser },
       ];

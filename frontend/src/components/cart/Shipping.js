@@ -19,7 +19,7 @@ const Shipping = () => {
     const dispatch=useDispatch()
     const navigate=useNavigate()
 
-    const {shippingInfo}=useSelector(state=>state.cart)
+    const {shippingInfo}=useSelector(state=>state.allCartItems)
 
     const [address,setAddress]=useState(shippingInfo?.address)
     const [city,setCity]=useState(shippingInfo?.city)

@@ -13,7 +13,7 @@ import { getCartItems } from '../../actions/cartActions.js';
 const Cart = () => {
     const navigate=useNavigate()
     const dispatch=useDispatch()
-    const {cartItems,loading,error}=useSelector(state=>state.cart)
+    const {cartItems,loading,error}=useSelector(state=>state.allCartItems)
     // console.log(user?.user?.cartItems)
 
     const checkoutHandler=()=>{
@@ -24,8 +24,7 @@ const Cart = () => {
             toast.error(error.extraDetails?error.extraDetails:error.message)
             dispatch(clearErrors())
         }
-        dispatch(getCartItems())
-    },[error,dispatch])
+    },[error])
   return (
     <>
         <div className='cartContainerHome'>

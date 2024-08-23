@@ -9,10 +9,12 @@ const Profile = () => {
     const navigate=useNavigate()
     const {isAuthenticated,loading,user}=useSelector(state=>state.userLoginRegister)
     // console.log(user,isAuthenticated)
+    
    useEffect(()=>{
         if(!isAuthenticated){
             navigate("/login")
         }
+        // window.location.reload()
    },[isAuthenticated])
   return (
     <>

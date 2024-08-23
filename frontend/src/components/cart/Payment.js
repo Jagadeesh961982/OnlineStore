@@ -23,7 +23,7 @@ const Payment = () => {
     const payBtn = useRef(null);
 
     const orderInfo = JSON.parse(sessionStorage.getItem('orderInfo'));
-    const { shippingInfo, cartItems } = useSelector(state => state.cart);
+    const { shippingInfo, cartItems } = useSelector(state => state.allCartItems);
     const { user } = useSelector(state => state.userLoginRegister);
     const { error } = useSelector(state => state.newOrder);
 
@@ -51,7 +51,7 @@ const Payment = () => {
                     'Content-Type': 'application/json',
                 },
             });
-            console.log(data)
+            // console.log(data)
 
             const client_secret = data.client_secret;
 

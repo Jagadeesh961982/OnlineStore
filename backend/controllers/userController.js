@@ -260,6 +260,7 @@ export const addCartItems=async(req,res,next)=>{
                 break;
             }
         }
+        
         if(isItemExist){
             user.cartItems.forEach(item=>{
                 if(item.product===product){
@@ -267,7 +268,7 @@ export const addCartItems=async(req,res,next)=>{
                 }
             })
             await user.save();
-            res.status(200).json({success:true})
+            res.status(200).json({success:true,message:`Quantity of ${name} updated to ${quantity}`})
             return  
         }
 
@@ -282,7 +283,7 @@ export const addCartItems=async(req,res,next)=>{
 
         user.cartItems.push(item);
         await user.save();
-        res.status(200).json({success:true})
+        res.status(200).json({success:true,message:"Item added to cart successfully"})
     }catch(error){
         const err=new Error("Trouble in adding cart items")
         err.status=400;
@@ -303,6 +304,33 @@ export const getAllCartItems=async(req,res,next)=>{
         next(err)
     }
 }
+
+// add shipping details
+export const addShippingDetails=async(req,res,next)=>{
+    try{
+        const user=await User.findById(req.user.id);
+        user.shippingInfo=req.body.shippingInfo;
+        await user.save();
+        res.status(200).json({success:true})
+}catch(error){
+    const err=new Error("Trouble in adding shipping details")
+    err.status=400;
+    err.extraDetails=error.message
+    next(err)
+}
+}
+
+// get the shipping details
+export const getShippingDetails=async(req,res,next)=>{
+    try{
+        const user=await User.findById(req.user.id);
+        res.status(200).json({success:true,shippingInfo:user.shippingInfo})
+    }catch(error){
+        const err=new Error("Trouble in fetching shipping details")
+        err.status=400;
+        err.extraDetails=error.message
+        next(err)
+    }}
 
 // remove the cart items
 export const removeCartItems=async(req,res,next)=>{
@@ -325,6 +353,22 @@ export const removeCartItems=async(req,res,next)=>{
         next(err)
     }
 }
+
+// remove all cart items
+export const removeAllCartItems=async(req,res,next)=>{
+    try{
+        const user=await User.findById(req.user.id);
+        user.cartItems=[];
+        await user.save();
+        res.status(200).json({success:true})
+    }catch(error){
+        const err=new Error("Trouble in removing all cart items")
+        err.status=400;
+        err.extraDetails=error.message
+        next(err)
+    }
+}
+
 // get all users
 export const getAllUsers=async(req,res,next)=>{
     const users=await User.find();

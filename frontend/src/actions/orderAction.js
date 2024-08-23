@@ -1,6 +1,7 @@
 import axios from "axios";
 import { ALL_ORDERS_FAIL, ALL_ORDERS_REQUEST, ALL_ORDERS_SUCCESS, CLEAR_ERRORS, CREATE_ORDER_FAIL, CREATE_ORDER_REQUEST, CREATE_ORDER_SUCCESS, DELETE_ORDER_FAIL, DELETE_ORDER_REQUEST, DELETE_ORDER_SUCCESS, MY_ORDERS_FAIL, MY_ORDERS_REQUEST, MY_ORDERS_SUCCESS, ORDER_DETAILS_FAIL, ORDER_DETAILS_REQUEST, ORDER_DETAILS_SUCCESS, UPDATE_ORDER_FAIL, UPDATE_ORDER_REQUEST, UPDATE_ORDER_SUCCESS } from "../constants/orderConstants";
 import { isAction } from "@reduxjs/toolkit";
+import { getCartItems, removeAllItemsFromCart } from "./cartActions";
 
 const BASE_URL = "http://localhost:5000";
 
@@ -23,6 +24,8 @@ export const createOrder = (order) => async (dispatch) => {
       type: CREATE_ORDER_SUCCESS,
       payload: data,
     });
+    dispatch(removeAllItemsFromCart())
+    dispatch(getCartItems())
   } catch (error) {
     dispatch({
       type: CREATE_ORDER_FAIL,

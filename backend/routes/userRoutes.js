@@ -1,4 +1,4 @@
-import {loginUser, registerUser,logOutUser,forgotPassword,resetPassword,userDetails, updatePassword, updateProfile, getAllUsers, getSingleUser, updateUserRole, deleteUser, feedback, getAllFeedbacks, deleteFeedback, addCartItems, removeCartItems, getAllCartItems} from "../controllers/userController.js";
+import {loginUser, registerUser,logOutUser,forgotPassword,resetPassword,userDetails, updatePassword, updateProfile, getAllUsers, getSingleUser, updateUserRole, deleteUser, feedback, getAllFeedbacks, deleteFeedback, addCartItems, removeCartItems, getAllCartItems, addShippingDetails, getShippingDetails, removeAllCartItems} from "../controllers/userController.js";
 import {authorizeRole, isAuthenticatedUser} from "../middleware/authenticaton.js";
 import express from "express";
 
@@ -34,11 +34,21 @@ router.put("/profile/update",isAuthenticatedUser,updateProfile)
 // add cart items
 router.put("/cart/add",isAuthenticatedUser,addCartItems)
 
+
+// add shipping info
+router.put("/shipping",isAuthenticatedUser,addShippingDetails)
+
+// get shipping info
+router.get("/shipping",isAuthenticatedUser,getShippingDetails)
+
 // get cart items
 router.get("/cart",isAuthenticatedUser,getAllCartItems)
 
 // remove cart items
 router.put("/cart/remove",isAuthenticatedUser,removeCartItems)
+
+// remove all cart items
+router.put("/cart/removeall",isAuthenticatedUser,removeAllCartItems)
 
 // feedback by user
 router.put("/feedback",isAuthenticatedUser,feedback)

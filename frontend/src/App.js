@@ -40,10 +40,14 @@ import axios from 'axios';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import NewProduct from './components/admin/NewProduct.js';
+import { getCartItems } from './actions/cartActions.js';
+import NotFound from './components/layout/NotFound/NotFound.js';
 
 function App() {
+  const dispatch=useDispatch();
   const baseUrl=process.env.REACT_APP_BASE_URL;
   const {isAuthenticated,loading,user}=useSelector(state=>state.userLoginRegister)
+  const {cartItems}=useSelector(state=>state.allCartItems)
   const [stripeApiKey,setStripeApiKey]=useState(process.env.STRIPE_API_KEY)
   const getStripeApiKey=async()=>{
    
@@ -58,12 +62,15 @@ function App() {
   useEffect(()=>{
 
     store.dispatch(loadUser())
+    dispatch(getCartItems())
     getStripeApiKey()
   },[])
+  // window.addEventListener('contextmenu',(e)=>{e.preventDefault()})
+  
   return (
     <Router>
       <Header />
-      {isAuthenticated && <UserOptions user={user.user}/>}
+      {isAuthenticated && <UserOptions user={user.user} items={cartItems}/>}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/product/:id" element={<ProductDetails />} />
@@ -82,7 +89,7 @@ function App() {
         {isAuthenticated && stripeApiKey && (<Route path='/process/payment' element={<Elements stripe={loadStripe(stripeApiKey)}><Payment /></Elements>} />)}
         {isAuthenticated && <Route path='/success' element={<OrderSuccess/>} />}
         {isAuthenticated && <Route path='/orders' element={<MyOrders/>} />}
-        {isAuthenticated && <Route path='orders/:id' element={<OrderDetails />} />}
+        {isAuthenticated && <Route path='/orders/:id' element={<OrderDetails />} />}
         {isAuthenticated && user?.user?.isAdmin && <Route path='/admin/dashboard' element={<Dashboard />} />}
         {isAuthenticated && user?.user?.isAdmin && <Route path='/admin/products' element={<ProductList />} />}
         {isAuthenticated && user?.user?.isAdmin && <Route path='/admin/product/new' element={<NewProduct />} />}
@@ -95,6 +102,7 @@ function App() {
         {isAuthenticated && user?.user?.isAdmin && <Route path='/admin/feedbacks' element={<Feedbacks />} />}
         {isAuthenticated && <Route path='/contact' element={<Contact />} />}
         <Route path='/about' element={<About />} />
+        <Route path='*' element={<NotFound />} />
 
       </Routes>
       <Footer />
