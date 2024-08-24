@@ -37,7 +37,7 @@ const Dashboard = () => {
         label:"Total Amount",
         backgroundColor:"tomato",
         hoverBackgroundColor:"rgb(197,72,49",
-        data:[0,4000],
+        data:[0,Math.round(totalAmount*100)/100],
       },
     ],
   }

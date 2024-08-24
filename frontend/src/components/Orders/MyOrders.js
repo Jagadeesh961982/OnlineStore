@@ -59,7 +59,12 @@ const MyOrders = () => {
     <>
       <MetaData title={'My Orders'} />
       {loading ? <Loading /> : (
+        orders?.length===0 ? <div className='noOrders'>
+          <Typography id="noOrdersHeading">No orders yet</Typography>
+          <Link to='/'>Go back to home</Link>
+        </div> :
         <div className='myOrdersPage'>
+          <h1 className='ordersHeading'>MY ORDERS</h1>
           <DataGrid 
               rows={rows}
               columns={columns}

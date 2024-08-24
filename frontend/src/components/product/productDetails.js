@@ -1,10 +1,10 @@
+import "./productDetails.css";
 import { useEffect, useState } from 'react';
 import Carousel from 'react-multi-carousel';
 import "react-multi-carousel/lib/styles.css";
 import {useDispatch,useSelector} from "react-redux";
 import { clearErrors, createNewReview, getProductDetails } from '../../actions/productAction.js';
 import { useParams } from 'react-router-dom';
-import "./productDetails.css";
 import ReviewCard from './ReviewCard.js';
 import Loading from '../layout/Loading/Loading.js';
 import MetaData from '../layout/MetaData.js';
@@ -12,12 +12,14 @@ import { addItemToCart, getCartItems } from '../../actions/cartActions.js';
 import {toast} from "react-toastify";
 import { Dialog,DialogActions,DialogContent,DialogTitle,Button, Rating } from '@mui/material';
 import { ADD_TO_CART_RESET } from '../../constants/cartConstants.js';
+import { getMyorders } from '../../actions/orderAction.js';
 
 
 const ProductDetails=()=>{
     const {id}=useParams();
     const dispatch=useDispatch();
     const {product,loading,error}=useSelector(state=>state.productDetails);
+    const {orders} = useSelector(state => state.myOrders)
     const {message}=useSelector(state=>state.cartItem)
     const {success,error:reviewError}=useSelector(state=>state.review)
     const [quantity,setQuantity]=useState(1);
@@ -25,7 +27,18 @@ const ProductDetails=()=>{
     const [rating,setRating]=useState(0)
     const [comment,setComment]=useState("")
     
-
+    let isOrdered;
+    if(orders){
+      for(let order of orders){
+        for(let item of order.orderItems){
+          if(item.product===id){
+            isOrdered=true
+            break;
+          }
+        }
+      }
+    }
+   
 
     const increaseQuantity=()=>{
       if(product.stock>quantity && quantity<5){
@@ -97,6 +110,7 @@ const ProductDetails=()=>{
           toast.success("Review saved successfully")
         }
       dispatch(getProductDetails(id));
+      dispatch(getMyorders())
     },[dispatch,id,error,reviewError,success,message]);
     
     const options = {
@@ -184,28 +198,39 @@ const ProductDetails=()=>{
         open={open}
         onClose={sumbitReviewToggle}
       >
-        <DialogTitle>Submit Review</DialogTitle>
-        <DialogContent className='submitDialog'>
-          <Rating name="simple-controlled"
-            value={rating}
-            onChange={(e) => {
-            setRating(e.target.value);}}
-            size="large"
-          />
-          <textarea
-            className='submitDialogTextArea'
-            cols="30"
-            rows="5" 
-            value={comment}
-            onChange={e=>setComment(e.target.value)}
-          >
+      {!isOrdered ? (
+        <>
+          <DialogTitle>Not Ordered ?😬</DialogTitle>
+          <DialogContent>
+            <p>You can only submit a review for a product you have ordered</p>
+          </DialogContent>
 
-          </textarea>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={sumbitReviewToggle} color='secondary'>Cancel</Button>
-          <Button onClick={submitReviewHandler} color='primary'>Submit</Button>
-        </DialogActions>
+        </>) :(
+        <>
+          <DialogTitle>Submit Review</DialogTitle>
+          <DialogContent className='submitDialog'>
+            <Rating name="simple-controlled"
+              value={rating}
+              onChange={(e) => {
+              setRating(e.target.value);}}
+              size="large"
+            />
+            <textarea
+              className='submitDialogTextArea'
+              cols="30"
+              rows="5" 
+              value={comment}
+              onChange={e=>setComment(e.target.value)}
+            >
+
+            </textarea>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={sumbitReviewToggle} color='secondary'>Cancel</Button>
+            <Button onClick={submitReviewHandler} color='primary'>Submit</Button>
+          </DialogActions>
+        </>
+      )}
       </Dialog>
       <div className='reviewHeading'>
         <h2>Reviews</h2>

@@ -13,6 +13,13 @@ width: 100vw;
 
 }
 
+.ordersHeading{
+    font: 500 2vmax "Roboto" sans-serif;
+    text-align: center;
+    padding: 1vmax;
+    box-sizing: border-box;
+}
+
 .myOrdersTable{
     background-color: white;
 }
@@ -54,6 +61,30 @@ width: 100vw;
 
 .MuiDataGrid-iconSeparator{
     display: none !important;
+}
+
+.noOrders{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#noOrdersHeading{
+    font-size: 3vmax;
+    font-weight: 500;
+    padding-bottom: 1vmax;
+}
+
+.noOrders a{
+    font-size: 1.5vmax;
+    background-color: rgb(51,51,51);
+    text-decoration: none;
+    padding: 0.5vmax 2vmax;
+    color: white;
+    border: none;
+    border-radius: 5px;
 }
 
 @media screen and (max-width:660px) {
